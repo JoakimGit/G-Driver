@@ -1,7 +1,12 @@
 import type { files_table, folders_table } from "@/server/db/schema";
 import { FileIcon, Folder as FolderIcon } from "lucide-react";
+import Link from "next/link";
 
-export const FileRow = ({ file }: { file: (typeof files_table.$inferSelect) }) => {
+export const FileRow = ({
+  file,
+}: {
+  file: typeof files_table.$inferSelect;
+}) => {
   return (
     <li
       key={file.id}
@@ -26,11 +31,11 @@ export const FileRow = ({ file }: { file: (typeof files_table.$inferSelect) }) =
   );
 };
 
-export const FolderRow = (props: {
-  folder: (typeof folders_table.$inferSelect);
-  handleFolderClick: () => void;
+export const FolderRow = ({
+  folder,
+}: {
+  folder: typeof folders_table.$inferSelect;
 }) => {
-  const { folder, handleFolderClick } = props;
   return (
     <li
       key={folder.id}
@@ -38,13 +43,13 @@ export const FolderRow = (props: {
     >
       <div className="grid grid-cols-12 items-center gap-4">
         <div className="col-span-6 flex items-center">
-          <button
-            onClick={() => handleFolderClick()}
+          <Link
+            href={`/f/${folder.id}`}
             className="flex items-center text-gray-100 hover:text-blue-400"
           >
             <FolderIcon className="mr-3" size={20} />
             {folder.name}
-          </button>
+          </Link>
         </div>
         <div className="col-span-3 text-gray-400"></div>
         <div className="col-span-3 text-gray-400"></div>
