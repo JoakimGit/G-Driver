@@ -1,12 +1,8 @@
-import type { files_table, folders_table } from "@/server/db/schema";
+import type { DB_FileType, DB_FolderType } from "@/server/db/schema";
 import { FileIcon, Folder as FolderIcon } from "lucide-react";
 import Link from "next/link";
 
-export const FileRow = ({
-  file,
-}: {
-  file: typeof files_table.$inferSelect;
-}) => {
+export const FileRow = ({ file }: { file: DB_FileType }) => {
   return (
     <li
       key={file.id}
@@ -31,11 +27,7 @@ export const FileRow = ({
   );
 };
 
-export const FolderRow = ({
-  folder,
-}: {
-  folder: typeof folders_table.$inferSelect;
-}) => {
+export const FolderRow = ({ folder }: { folder: DB_FolderType }) => {
   return (
     <li
       key={folder.id}

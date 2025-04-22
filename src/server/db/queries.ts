@@ -35,3 +35,14 @@ export const QUERIES = {
       .where(eq(files_table.parent, folderId));
   },
 };
+
+export const MUTATIONS = {
+  createFile: async (file: {
+    name: string;
+    size: number;
+    url: string;
+    parent: number;
+  }) => {
+    return await db.insert(files_table).values(file);
+  },
+};
