@@ -5,13 +5,13 @@ import { ChevronRight, Upload } from "lucide-react";
 import { FileRow, FolderRow } from "./file-row";
 import type { files_table, folders_table } from "@/server/db/schema";
 import Link from "next/link";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 export function DriveContents(props: {
   files: Array<typeof files_table.$inferSelect>;
   folders: Array<typeof folders_table.$inferSelect>;
   parents: Array<typeof folders_table.$inferSelect>;
 }) {
-
   const handleUpload = () => {
     alert("Upload functionality would be implemented here");
   };
@@ -36,13 +36,14 @@ export function DriveContents(props: {
               </div>
             ))}
           </div>
-          <Button
-            onClick={handleUpload}
-            className="bg-blue-600 text-white hover:bg-blue-700"
-          >
-            <Upload className="mr-2" size={20} />
-            Upload
-          </Button>
+          <div>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </div>
         </div>
         <div className="rounded-lg bg-gray-800 shadow-xl">
           <div className="border-b border-gray-700 px-6 py-4">
