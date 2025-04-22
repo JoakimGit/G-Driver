@@ -20,6 +20,7 @@ export const appFileRouter = {
     .middleware(async () => {
       // check if user is authenticated before uploading
       const user = await auth();
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
       if (!user.userId) throw new UploadThingError("Unauthorized");
 
       // attach metadata available at 'onUploadComplete' callback
