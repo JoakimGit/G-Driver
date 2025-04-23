@@ -1,6 +1,7 @@
-import { mockFiles, mockFolders } from "@/lib/mock-data";
+import { mockFolders } from "@/lib/mock-data";
 import { db } from "@/server/db";
-import { files_table, folders_table } from "@/server/db/schema";
+import { folders_table } from "@/server/db/schema";
+import { auth } from "@clerk/nextjs/server";
 
 export default async function Sandbox() {
   return (
@@ -9,30 +10,29 @@ export default async function Sandbox() {
         action={async () => {
           "use server";
 
-          await db
-            .insert(folders_table)
-            .values(
-              mockFolders.map((folder, index) => ({
-                id: index + 1,
-                name: folder.name,
-                parent: index !== 0 ? 1 : null,
-              })),
-            );
+          const user = await auth();
+          if (!user.userId) {
+            throw new Error("User not found");
+          }
 
-            await db
-            .insert(files_table)
-            .values(
-                mockFiles.map((file, index) => ({
-                id: index + 1,
-                name: file.name,
-                size: parseFloat(file.size) * 1000,
-                url: file.url,
-                parent: (index % 3) +1,
-              })),
-            );
+          const rootFolder = await db
+            .insert(folders_table)
+            .values({
+              name: "root",
+              ownerId: user.userId,
+              parent: null,
+            })
+            .$returningId();
+
+          const insertableFolders = mockFolders.map((folder) => ({
+            name: folder.name,
+            ownerId: user.userId,
+            parent: rootFolder[0]!.id,
+          }));
+          await db.insert(folders_table).values(insertableFolders);
         }}
       >
-        <button type="submit">Create file</button>
+        <button type="submit">Create folders</button>
       </form>
     </div>
   );
