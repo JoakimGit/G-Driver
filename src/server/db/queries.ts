@@ -1,7 +1,7 @@
 import "server-only";
 
 import { db } from "@/server/db";
-import { files_table, folders_table } from "@/server/db/schema";
+import { DB_FileType, files_table, folders_table } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 
 export const QUERIES = {
@@ -26,13 +26,15 @@ export const QUERIES = {
     return db
       .select()
       .from(folders_table)
-      .where(eq(folders_table.parent, folderId));
+      .where(eq(folders_table.parent, folderId))
+      .orderBy(folders_table.name);
   },
   getFiles: (folderId: number) => {
     return db
       .select()
       .from(files_table)
-      .where(eq(files_table.parent, folderId));
+      .where(eq(files_table.parent, folderId))
+      .orderBy(files_table.name);
   },
   getFolderById: async (folderId: number) => {
     const folder = await db
@@ -44,13 +46,7 @@ export const QUERIES = {
 };
 
 export const MUTATIONS = {
-  createFile: async (file: {
-    name: string;
-    size: number;
-    url: string;
-    parent: number;
-    ownerId: string;
-  }) => {
+  createFile: async (file: Omit<DB_FileType, "id" | "createdAt">) => {
     return await db.insert(files_table).values(file);
   },
 };

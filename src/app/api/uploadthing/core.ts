@@ -1,10 +1,12 @@
 import { MUTATIONS, QUERIES } from "@/server/db/queries";
 import { auth } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
+import { UploadThingError, UTApi } from "uploadthing/server";
 import { z } from "zod";
 
 const f = createUploadthing();
+
+export const utapi = new UTApi();
 
 export const appFileRouter = {
   // define a route for uploading images
@@ -49,6 +51,7 @@ export const appFileRouter = {
         name: file.name,
         size: file.size,
         url: file.ufsUrl,
+        fileKey: file.key,
         parent: metadata.folderId,
         ownerId: metadata.userId,
       });
