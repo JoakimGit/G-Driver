@@ -1,4 +1,5 @@
-import { MUTATIONS, QUERIES } from "@/server/db/queries";
+import { QUERIES } from "@/server/db/queries";
+import { MUTATIONS } from "@/server/db/mutations";
 import { auth } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError, UTApi } from "uploadthing/server";
@@ -16,8 +17,7 @@ export const appFileRouter = {
        * For full list of options and defaults, see the File Route API reference
        * @see https://docs.uploadthing.com/file-routes#route-config
        */
-      maxFileSize: "1GB",
-      maxFileCount: 9999,
+      maxFileSize: "8MB",
     },
   })
     .input(
